@@ -1,5 +1,4 @@
-import { COLORS } from "./constants/style";
-import { useState, useEffect, useLayoutEffect } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Checkbox from "@mui/material/Checkbox";
 import {
@@ -14,25 +13,40 @@ import {
   TodoItem,
   Taskname,
   Remove,
+  FilterBTNContainer,
+  FilterBTN,
 } from "./components/styledApp";
+import { COLORS } from "./constants/style";
 
 function Todo({ todo, handleRemove, handleCheckboxChange }) {
   return (
     <TodoItem $isDone={todo.isDone}>
-      <div>
+      {todo.isDone && (
         <Checkbox
+          defaultChecked
+          sx={{
+            "&.Mui-checked": {
+              color: COLORS.light_func,
+            },
+          }}
           onChange={() => {
             handleCheckboxChange(todo.id);
           }}
+        />
+      )}
+      {todo.isDone || (
+        <Checkbox
           sx={{
-            color: COLORS.light_func,
             "&.Mui-checked": {
-              color: `${COLORS.light_func}`,
+              color: COLORS.light_func,
             },
           }}
+          onChange={() => {
+            handleCheckboxChange(todo.id);
+          }}
         />
-        <Taskname $isDone={todo.isDone}>{todo.taskname}</Taskname>
-      </div>
+      )}
+      <Taskname $isDone={todo.isDone}>{todo.taskname}</Taskname>
       <Remove
         onClick={() => {
           handleRemove(todo.id);
@@ -47,25 +61,22 @@ Todo.propTypes = {
   hadleRemove: PropTypes.func,
 };
 
-const addTodoToLocalStorage = (todos) => {
-  localStorage.setItem("todos", JSON.stringify(todos));
-};
-
-let id = 1;
+let id = 3;
 export default function App() {
+  const [filter, setFilter] = useState("all");
   const [inputVal, setInputVal] = useState("");
-  const [todos, setTodos] = useState([]);
-  useEffect(() => {
-    addTodoToLocalStorage(todos);
-  }, [todos]);
-
-  useLayoutEffect(() => {
-    let data = localStorage.getItem("todos") || "";
-    if (data) {
-      setTodos(JSON.parse(data));
-    }
-  }, []);
-
+  const [todos, setTodos] = useState([
+    {
+      id: 1,
+      taskname: "吃早餐",
+      isDone: true,
+    },
+    {
+      id: 2,
+      taskname: "吃午餐",
+      isDone: false,
+    },
+  ]);
   const handleInputSubmit = (e) => {
     e.preventDefault();
     if (inputVal === "") {
@@ -100,7 +111,6 @@ export default function App() {
       })
     );
   };
-
   return (
     <Page>
       <Card>
@@ -110,18 +120,21 @@ export default function App() {
             <Input
               type="text"
               autoFocus={true}
-              placeholder="Type something here..."
+              placeholder="Add a task here..."
               value={inputVal}
               onChange={(e) => {
                 setInputVal(e.target.value);
               }}
             />
-            <Submit type="submit" value="ADD" />
+            <Submit type="submit" variant="contained">
+              ADD
+            </Submit>
           </InputForm>
         </InputArea>
-        <TodoArea>
+        <TodoArea id="sortable">
           {todos.map((todo) => (
             <Todo
+              className="ui-state-default"
               key={todo.id}
               handleRemove={handleRemove}
               handleCheckboxChange={handleCheckboxChange}
@@ -129,6 +142,29 @@ export default function App() {
             />
           ))}
         </TodoArea>
+        <FilterBTNContainer>
+          <FilterBTN
+            onClick={() => {
+              setFilter("all");
+            }}
+          >
+            all
+          </FilterBTN>
+          <FilterBTN
+            onClick={() => {
+              setFilter("active");
+            }}
+          >
+            active
+          </FilterBTN>
+          <FilterBTN
+            onClick={() => {
+              setFilter("completed");
+            }}
+          >
+            completed
+          </FilterBTN>
+        </FilterBTNContainer>
       </Card>
     </Page>
   );
