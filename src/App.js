@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Checkbox from "@mui/material/Checkbox";
 import {
@@ -15,12 +15,13 @@ import {
   Remove,
   FilterBTNContainer,
   FilterBTN,
+  FilterInfo,
 } from "./components/styledApp";
 import { COLORS } from "./constants/style";
 
-function Todo({ todo, handleRemove, handleCheckboxChange }) {
+function Todo({ todo, handleRemove, handleCheckboxChange, filter }) {
   return (
-    <TodoItem $isDone={todo.isDone}>
+    <TodoItem isDone={todo.isDone} filter={filter}>
       {todo.isDone && (
         <Checkbox
           defaultChecked
@@ -59,11 +60,13 @@ function Todo({ todo, handleRemove, handleCheckboxChange }) {
 Todo.propTypes = {
   todo: PropTypes.object,
   hadleRemove: PropTypes.func,
+  handleCheckboxChange: PropTypes.func,
+  filter: PropTypes.string,
 };
 
 let id = 3;
 export default function App() {
-  const [filter, setFilter] = useState("all");
+  const [filter, setFilter] = useState("ALL");
   const [inputVal, setInputVal] = useState("");
   const [todos, setTodos] = useState([
     {
@@ -77,6 +80,9 @@ export default function App() {
       isDone: false,
     },
   ]);
+  useEffect(() => {
+    console.log(todos);
+  });
   const handleInputSubmit = (e) => {
     e.preventDefault();
     if (inputVal === "") {
@@ -139,27 +145,32 @@ export default function App() {
               handleRemove={handleRemove}
               handleCheckboxChange={handleCheckboxChange}
               todo={todo}
+              filter={filter}
             />
           ))}
         </TodoArea>
-        <FilterBTNContainer>
+        <FilterBTNContainer todos={todos}>
+          <FilterInfo>filter: {filter}</FilterInfo>
           <FilterBTN
             onClick={() => {
-              setFilter("all");
+              setFilter("ALL");
+              setTodos(todos);
             }}
           >
             all
           </FilterBTN>
           <FilterBTN
             onClick={() => {
-              setFilter("active");
+              setFilter("ACTIVE");
+              setTodos(todos);
             }}
           >
             active
           </FilterBTN>
           <FilterBTN
             onClick={() => {
-              setFilter("completed");
+              setFilter("COMPLETED");
+              setTodos(todos);
             }}
           >
             completed

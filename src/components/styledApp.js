@@ -84,10 +84,22 @@ export const TodoItem = styled.li`
     cursor: pointer;
     border-bottom: 1.5px solid ${COLORS.light_shadow};
   }
-  ${({ $isDone }) =>
-    $isDone &&
-    `
+  ${({ isDone }) =>
+    isDone &&
+    `      
       background: ${COLORS.light_checked};
+    `}
+  ${({ isDone, filter }) =>
+    isDone &&
+    filter === "ACTIVE" &&
+    `
+      display: none;
+    `}
+  ${({ isDone, filter }) =>
+    !isDone &&
+    filter === "COMPLETED" &&
+    `
+      display: none;
     `}
 `;
 export const Taskname = styled.div`
@@ -95,7 +107,7 @@ export const Taskname = styled.div`
   font-size: 20px;
   color: ${COLORS.light_text_primary};
   ${(props) =>
-    props.$isDone &&
+    props.isDone &&
     `
     text-decoration: line-through;
     color: ${COLORS.light_shadow}
@@ -111,6 +123,8 @@ export const Remove = styled(DeleteOutlineIcon)`
   }
 `;
 export const FilterBTNContainer = styled.div`
+  display: ${({ todos }) => (todos.length ? "flex" : "none")};
+  align-items: center;
   margin: 10px auto;
 `;
 export const FilterBTN = styled(Button)`
@@ -122,4 +136,8 @@ export const FilterBTN = styled(Button)`
   &:hover {
     background: ${COLORS.light_func_transparent};
   }
+`;
+export const FilterInfo = styled.div`
+  padding: 8px 20px;
+  color: ${COLORS.ligth_text_grey};
 `;

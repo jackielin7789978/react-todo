@@ -6,6 +6,7 @@ export const COLORS = {
   light_text_primary: "#555",
   light_text_primary_highlight: "#111",
   light_text_white: "#fff",
+  ligth_text_grey: "#aaa",
   light_func: "#EE882F",
   light_func_hover: "#F09342",
   light_func_transparent: "rgba(240, 147, 66, 0.1)",
