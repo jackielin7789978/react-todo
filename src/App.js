@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import { COLORS } from "./constants/style";
+import { useState, useEffect, useLayoutEffect } from "react";
+import PropTypes from "prop-types";
 
 const Page = styled.div`
   width: 100%;
@@ -39,7 +41,7 @@ const Input = styled.input`
   padding: 6px;
   font-size: 20px;
   font-family: "Maven Pro", sans-serif;
-  color: ${COLORS.light_text_primary_hightlight};
+  color: ${COLORS.light_text_primary_highlight};
   border: none;
   border-bottom: 1px solid ${COLORS.light_shadow};
   margin-right: 18px;
@@ -86,17 +88,64 @@ const Taskname = styled.div`
   font-size: 22px;
   color: ${COLORS.light_text_primary};
 `;
+
+function Todo({ todo }) {
+  return (
+    <TodoItem>
+      <div>
+        <Checkbox>O</Checkbox>
+        <Taskname>{todo.taskname}</Taskname>
+      </div>
+      <Remove>X</Remove>
+    </TodoItem>
+  );
+}
+
+const addTodoToLocalStorage = (todos) => {
+  localStorage.setItem("todos", JSON.stringify(todos));
+};
+
+let id = 1;
 export default function App() {
+  const [inputVal, setInputVal] = useState("");
+  const [todos, setTodos] = useState([]);
+  const handleInputSubmit = (e) => {
+    e.preventDefault();
+    setTodos([
+      {
+        id,
+        taskname: inputVal,
+      },
+      ...todos,
+    ]);
+    setInputVal("");
+    id++;
+  };
+  useEffect(() => {
+    addTodoToLocalStorage(todos);
+  }, [todos]);
+
+  useLayoutEffect(() => {
+    let data = localStorage.getItem("todos") || "";
+    if (data) {
+      setTodos(JSON.parse(data));
+    }
+  }, []);
+
   return (
     <Page>
       <Card>
         <InputArea>
           <Title>TODO</Title>
-          <InputForm>
+          <InputForm onSubmit={handleInputSubmit}>
             <Input
               type="text"
               autoFocus={true}
               placeholder="Type something here..."
+              value={inputVal}
+              onChange={(e) => {
+                setInputVal(e.target.value);
+              }}
             />
             <Submit type="submit" value="ADD" />
           </InputForm>
@@ -109,13 +158,9 @@ export default function App() {
             </div>
             <Remove>X</Remove>
           </TodoItem>
-          <TodoItem>
-            <div>
-              <Checkbox>O</Checkbox>
-              <Taskname>Grocery Shopping</Taskname>
-            </div>
-            <Remove>X</Remove>
-          </TodoItem>
+          {todos.map((todo) => (
+            <Todo todo={todo} />
+          ))}
         </TodoArea>
       </Card>
     </Page>
