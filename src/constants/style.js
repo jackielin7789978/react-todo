@@ -10,5 +10,5 @@ export const COLORS = {
   light_func: "#EE882F",
   light_func_hover: "#F09342",
   light_func_transparent: "rgba(240, 147, 66, 0.1)",
-  light_checked: "rgba(170, 170, 170, 0.1)",
+  light_checked: "rgba(120, 120, 120, 0.1)",
 };

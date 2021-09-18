@@ -22,32 +22,17 @@ import { COLORS } from "./constants/style";
 function Todo({ todo, handleRemove, handleCheckboxChange, filter }) {
   return (
     <TodoItem isDone={todo.isDone} filter={filter}>
-      {todo.isDone && (
-        <Checkbox
-          defaultChecked
-          sx={{
-            "&.Mui-checked": {
-              color: COLORS.light_func,
-            },
-          }}
-          onChange={() => {
-            handleCheckboxChange(todo.id);
-          }}
-        />
-      )}
-      {todo.isDone || (
-        <Checkbox
-          sx={{
-            "&.Mui-checked": {
-              color: COLORS.light_func,
-            },
-          }}
-          onChange={() => {
-            handleCheckboxChange(todo.id);
-          }}
-        />
-      )}
-      <Taskname $isDone={todo.isDone}>{todo.taskname}</Taskname>
+      <Checkbox
+        sx={{
+          "&.Mui-checked": {
+            color: COLORS.light_func,
+          },
+        }}
+        onChange={() => {
+          handleCheckboxChange(todo.id);
+        }}
+      />
+      <Taskname isDone={todo.isDone}>{todo.taskname}</Taskname>
       <Remove
         onClick={() => {
           handleRemove(todo.id);
@@ -72,7 +57,7 @@ export default function App() {
     {
       id: 1,
       taskname: "吃早餐",
-      isDone: true,
+      isDone: false,
     },
     {
       id: 2,
@@ -80,9 +65,7 @@ export default function App() {
       isDone: false,
     },
   ]);
-  useEffect(() => {
-    console.log(todos);
-  });
+
   const handleInputSubmit = (e) => {
     e.preventDefault();
     if (inputVal === "") {
@@ -107,14 +90,19 @@ export default function App() {
     setTodos(data);
   };
   const handleCheckboxChange = (id) => {
+    // 打勾時加上排序功能，已完成的排後面
     setTodos(
-      todos.map((todo) => {
-        if (todo.id !== id) return todo;
-        return {
-          ...todo,
-          isDone: !todo.isDone,
-        };
-      })
+      todos
+        .map((todo) => {
+          if (todo.id !== id) return todo;
+          return {
+            ...todo,
+            isDone: !todo.isDone,
+          };
+        })
+        .sort((a, b) => {
+          return a.isDone - b.isDone;
+        })
     );
   };
   return (
@@ -137,7 +125,7 @@ export default function App() {
             </Submit>
           </InputForm>
         </InputArea>
-        <TodoArea id="sortable">
+        <TodoArea>
           {todos.map((todo) => (
             <Todo
               className="ui-state-default"

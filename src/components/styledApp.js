@@ -106,12 +106,7 @@ export const Taskname = styled.div`
   flex: 1;
   font-size: 20px;
   color: ${COLORS.light_text_primary};
-  ${(props) =>
-    props.isDone &&
-    `
-    text-decoration: line-through;
-    color: ${COLORS.light_shadow}
-  `}
+  text-decoration: ${(props) => (props.isDone ? "line-through" : "none")};
 `;
 export const Remove = styled(DeleteOutlineIcon)`
   cursor: pointer;
