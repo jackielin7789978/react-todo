@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import PropTypes from "prop-types";
 import Checkbox from "@mui/material/Checkbox";
 import {
@@ -83,12 +83,6 @@ export default function App() {
     setInputVal("");
     id++;
   };
-  const handleRemove = (id) => {
-    const data = todos.filter((todo) => {
-      return id !== todo.id;
-    });
-    setTodos(data);
-  };
   const handleCheckboxChange = (id) => {
     // 打勾時加上排序功能，已完成的排後面
     setTodos(
@@ -105,6 +99,19 @@ export default function App() {
         })
     );
   };
+  const handleRemove = (id) => {
+    const data = todos.filter((todo) => {
+      return id !== todo.id;
+    });
+    setTodos(data);
+  };
+  const handleClearCompleted = () => {
+    const data = todos.filter((todo) => {
+      return todo.isDone === false;
+    });
+    setTodos(data);
+  };
+
   return (
     <Page>
       <Card>
@@ -138,7 +145,7 @@ export default function App() {
           ))}
         </TodoArea>
         <FilterBTNContainer todos={todos}>
-          <FilterInfo>filter: {filter}</FilterInfo>
+          <FilterInfo>{filter}</FilterInfo>
           <FilterBTN
             onClick={() => {
               setFilter("ALL");
@@ -163,6 +170,7 @@ export default function App() {
           >
             completed
           </FilterBTN>
+          <FilterBTN onClick={handleClearCompleted}>clear completed</FilterBTN>
         </FilterBTNContainer>
       </Card>
     </Page>

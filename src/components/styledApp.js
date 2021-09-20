@@ -121,10 +121,11 @@ export const FilterBTNContainer = styled.div`
   display: ${({ todos }) => (todos.length ? "flex" : "none")};
   align-items: center;
   margin: 10px auto;
+  font-size: 14px;
 `;
 export const FilterBTN = styled(Button)`
   margin: 0 4px;
-  padding: 8px 20px;
+  padding: 8px 16px;
   border-radius: 2px;
   color: ${COLORS.light_func};
   border: none;
@@ -133,6 +134,6 @@ export const FilterBTN = styled(Button)`
   }
 `;
 export const FilterInfo = styled.div`
-  padding: 8px 20px;
+  padding: 8px 16px;
   color: ${COLORS.ligth_text_grey};
 `;
