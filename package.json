@@ -21,7 +21,7 @@
     "styled-components": "^5.3.1",
     "web-vitals": "^1.0.1"
   },
-  "homepage": "https://github.com/jackielin7789978/react-todo",
+  "homepage": "https://jackielin7789978.github.io/react-todo",
   "resolutions": {
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
   },
