@@ -12,6 +12,10 @@ import {
   TodoArea,
   TodoItem,
   Taskname,
+  Form,
+  FormInput,
+  Edit,
+  Done,
   Remove,
   FilterBTNContainer,
   FilterBTN,
@@ -19,7 +23,79 @@ import {
 } from "./components/styledApp";
 import { COLORS } from "./constants/style";
 
-function Todo({ todo, handleRemove, handleCheckboxChange, filter }) {
+function EditForm({ todo, todos, setTodos }) {
+  const [newInputVal, setNewInputVal] = useState(todo.taskname);
+  const handleEdit = (id, input) => {
+    setTodos(
+      todos.map((todo) => {
+        if (todo.id !== id) return todo;
+        return {
+          ...todo,
+          taskname: input,
+          isBeingEdited: false,
+        };
+      })
+    );
+  };
+  return (
+    <Form
+      onSubmit={(e) => {
+        e.preventDefault();
+        handleEdit(todo.id, newInputVal);
+      }}
+    >
+      <FormInput
+        autoFocus
+        value={newInputVal}
+        onChange={(e) => {
+          setNewInputVal(e.target.value);
+        }}
+      />
+      <Done
+        onClick={() => {
+          handleEdit(todo.id, newInputVal);
+        }}
+      />
+    </Form>
+  );
+}
+
+function Todo({ todo, todos, setTodos, filter }) {
+  const handleStartEdit = (id) => {
+    setTodos(
+      todos.map((todo) => {
+        if (todo.id !== id) return todo;
+        // 不能編輯已完成的 todo
+        if (todo.isDone) return todo;
+        return {
+          ...todo,
+          isBeingEdited: true,
+        };
+      })
+    );
+  };
+  const handleCheckboxChange = (id) => {
+    // 打勾時加上排序功能，已完成的排後面
+    setTodos(
+      todos
+        .map((todo) => {
+          if (todo.id !== id) return todo;
+          return {
+            ...todo,
+            isDone: !todo.isDone,
+          };
+        })
+        .sort((a, b) => {
+          return a.isDone - b.isDone;
+        })
+    );
+  };
+  const handleRemove = (id) => {
+    const data = todos.filter((todo) => {
+      return id !== todo.id;
+    });
+    setTodos(data);
+  };
   return (
     <TodoItem isDone={todo.isDone} filter={filter}>
       <Checkbox
@@ -32,7 +108,19 @@ function Todo({ todo, handleRemove, handleCheckboxChange, filter }) {
           handleCheckboxChange(todo.id);
         }}
       />
-      <Taskname isDone={todo.isDone}>{todo.taskname}</Taskname>
+      {!todo.isBeingEdited && (
+        <Taskname isDone={todo.isDone}>{todo.taskname}</Taskname>
+      )}
+      {todo.isBeingEdited && (
+        <EditForm todo={todo} todos={todos} setTodos={setTodos} />
+      )}
+      {!todo.isBeingEdited && (
+        <Edit
+          onClick={() => {
+            handleStartEdit(todo.id);
+          }}
+        />
+      )}
       <Remove
         onClick={() => {
           handleRemove(todo.id);
@@ -58,11 +146,13 @@ export default function App() {
       id: 1,
       taskname: "吃早餐",
       isDone: false,
+      isBeingEdited: false,
     },
     {
       id: 2,
       taskname: "吃午餐",
       isDone: false,
+      isBeingEdited: false,
     },
   ]);
 
@@ -82,28 +172,6 @@ export default function App() {
     ]);
     setInputVal("");
     id++;
-  };
-  const handleCheckboxChange = (id) => {
-    // 打勾時加上排序功能，已完成的排後面
-    setTodos(
-      todos
-        .map((todo) => {
-          if (todo.id !== id) return todo;
-          return {
-            ...todo,
-            isDone: !todo.isDone,
-          };
-        })
-        .sort((a, b) => {
-          return a.isDone - b.isDone;
-        })
-    );
-  };
-  const handleRemove = (id) => {
-    const data = todos.filter((todo) => {
-      return id !== todo.id;
-    });
-    setTodos(data);
   };
   const handleClearCompleted = () => {
     const data = todos.filter((todo) => {
@@ -137,9 +205,9 @@ export default function App() {
             <Todo
               className="ui-state-default"
               key={todo.id}
-              handleRemove={handleRemove}
-              handleCheckboxChange={handleCheckboxChange}
               todo={todo}
+              todos={todos}
+              setTodos={setTodos}
               filter={filter}
             />
           ))}

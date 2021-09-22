@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import { COLORS } from "../constants/style";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import Button from "@mui/material/Button";
 
@@ -105,12 +107,49 @@ export const TodoItem = styled.li`
 export const Taskname = styled.div`
   flex: 1;
   font-size: 20px;
+  font-family: "Maven Pro", sans-serif;
   color: ${COLORS.light_text_primary};
   text-decoration: ${(props) => (props.isDone ? "line-through" : "none")};
 `;
+export const Form = styled.form`
+  display: flex;
+  justify-content: space-between;
+  flex: 1;
+  padding: 0;
+`;
+export const FormInput = styled.input`
+  font-size: 20px;
+  font-family: "Maven Pro", sans-serif;
+  color: ${COLORS.light_text_primary_edit};
+  padding: 0;
+  border: none;
+  border-radius: 0px;
+  transition: all 0.2s;
+  &:focus {
+    outline: none;
+  }
+`;
+export const Edit = styled(EditOutlinedIcon)`
+  cursor: pointer;
+  padding: 8px;
+  transition: all 0.1s;
+  &:hover {
+    color: ${COLORS.light_text_primary};
+    transform: translate(1px, 1px);
+  }
+`;
+export const Done = styled(DoneOutlinedIcon)`
+  cursor: pointer;
+  padding: 8px;
+  transition: all 0.1s;
+  &:hover {
+    color: ${COLORS.light_text_primary};
+    transform: translate(1px, 1px);
+  }
+`;
 export const Remove = styled(DeleteOutlineIcon)`
   cursor: pointer;
-  padding: 10px;
+  padding: 8px;
   transition: all 0.1s;
   &:hover {
     color: ${COLORS.light_text_primary};
