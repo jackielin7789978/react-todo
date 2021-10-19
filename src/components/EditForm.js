@@ -1,9 +1,12 @@
 import { useState } from 'react'
 import styled from 'styled-components'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCheckSquare } from '@fortawesome/free-solid-svg-icons'
 
 const Form = styled.form`
   display: flex;
   justify-content: space-between;
+  align-items: center;
   flex: 1;
   padding: 0;
 `
@@ -20,14 +23,14 @@ const FormInput = styled.input`
     outline: none;
   }
 `
-
-const Done = styled.span`
+const Done = styled(FontAwesomeIcon)`
   cursor: pointer;
-  margin-right: 16px;
+  margin-right: 20px;
   transition: all 0.1s;
-  color: ${({ theme }) => theme.text_grey};
+  font-size: 20px;
+  color: ${({ theme }) => theme.text_primary};
   &:hover {
-    color: ${({ theme }) => theme.text_primary};
+    color: ${({ theme }) => theme.text_primary_highlight};
     transform: translate(1px, 1px);
   }
 `
@@ -61,6 +64,7 @@ export default function EditForm({ todo, todos, setTodos }) {
         }}
       />
       <Done
+        icon={faCheckSquare}
         onClick={() => {
           handleEdit(todo.id, newInputVal)
         }}

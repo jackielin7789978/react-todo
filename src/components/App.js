@@ -1,9 +1,12 @@
 import { useState } from 'react'
 import { ThemeProvider } from 'styled-components'
-import { theme } from '../constants/style'
+import { Theme } from '../constants/style'
 import styled from 'styled-components'
 import Todo from './Todo'
 import Footer from './Footer'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faMoon } from '@fortawesome/free-solid-svg-icons'
+import { faSun } from '@fortawesome/free-solid-svg-icons'
 
 const MainArea = styled.div`
   min-height: calc(100vh - 50px);
@@ -16,7 +19,7 @@ const Card = styled.div`
   width: 600px;
   min-height: 200px;
   background: ${({ theme }) => theme.card};
-  box-shadow: 2px 6px 8px 2px ${({ theme }) => theme.shadow};
+  box-shadow: 1px 4px 10px 1px ${({ theme }) => theme.shadow};
   border-radius: 2px;
   border: 1px solid transparent;
   display: flex;
@@ -45,19 +48,19 @@ const Input = styled.input`
   font-size: 20px;
   font-family: 'Maven Pro', sans-serif;
   background: ${({ theme }) => theme.card};
-  color: ${({ theme }) => theme.text_primary_hightlight};
+  color: ${({ theme }) => theme.text_primary_highlight};
   border: none;
   margin-right: 18px;
-  border-bottom: 1.5px solid transparent;
+  border-bottom: 1px solid transparent;
   border-radius: 0px;
   transition: linear 0.2s;
   &:focus {
     outline: none;
-    border-bottom: 1.5px solid ${({ theme }) => theme.shadow};
+    border-bottom: 1px solid ${({ theme }) => theme.border_bottom};
   }
 `
 const Submit = styled.button`
-  color: ${({ theme }) => theme.text_primary_hightlight};
+  color: ${({ theme }) => theme.text_submit};
   font-family: 'Roboto', sans-serif;
   padding: 8px 20px;
   background: ${({ theme }) => theme.func};
@@ -84,28 +87,37 @@ const FilterBTN = styled.button`
   padding: 8px 16px;
   border-radius: 2px;
   color: ${({ theme }) => theme.text_primary};
+  background: ${({ theme }) => theme.btn_grey};
   border: none;
+  transition: all 0.2s;
   &:hover {
     background: ${({ theme }) => theme.func_transparent};
   }
 `
 const FilterInfo = styled.div`
   padding: 8px 16px;
-  color: ${({ theme }) => theme.text_grey}; ;
+  color: ${({ theme }) => theme.text_primary}; ;
 `
 const Circle = styled.div`
-  width: 30px;
-  height: 30px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   background: ${({ theme }) => theme.func};
   position: absolute;
   top: 20px;
-  right: 20px;
+  right: 24px;
   cursor: pointer;
+`
+const Icon = styled(FontAwesomeIcon)`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `
 
 let id = 3
 export default function App() {
+  const [theme, setTheme] = useState(true)
   const [filter, setFilter] = useState('ALL')
   const [inputVal, setInputVal] = useState('')
   const [todos, setTodos] = useState([
@@ -147,17 +159,20 @@ export default function App() {
     setTodos(data)
   }
 
-  const iconStyle = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)'
-  }
-
   return (
-    <ThemeProvider theme={theme.light}>
+    <ThemeProvider theme={theme ? Theme.dark : Theme.light}>
       <MainArea>
-        <Circle></Circle>
+        <Circle
+          onClick={() => {
+            setTheme(!theme)
+          }}
+        >
+          {theme ? (
+            <Icon icon={faMoon} />
+          ) : (
+            <Icon icon={faSun} style={{ color: '#fff' }} />
+          )}
+        </Circle>
         <Card>
           <InputArea>
             <Title>TODO</Title>
