@@ -1,3 +1,18 @@
+## React Todo 小工具
+
+這是 Lidemy 程師導師計畫的作業，是一個用 React 實作出的 todo list app，功能包括：
+
+1. 新增 todo
+2. 編輯 todo
+3. 刪除 todo
+4. 標記完成/未完成
+5. 清空已完成 todo
+6. 篩選 todo（全部、未完成、已完成）
+7. 已完成項目會自動排列在最下層
+8. 支援 dark mode
+
+[Demo 連結](https://jackielin7789978.github.io/react-todo/)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
