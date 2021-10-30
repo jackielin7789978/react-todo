@@ -1,4 +1,4 @@
-export const Theme = {
+export const COLOR_THEME = {
   light: {
     page: '#f5f5f5',
     card: '#fff',
